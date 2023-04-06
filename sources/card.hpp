@@ -12,6 +12,5 @@ namespace ariel{
             Card(){};
             Card(int number);
             int getNum() const;
-
     };
 }

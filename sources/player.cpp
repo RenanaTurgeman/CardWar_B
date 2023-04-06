@@ -30,6 +30,17 @@ Card Player::playCard() {
         stack.insert(stack.begin(), cards.begin(), cards.end());
     }
 
+    Card Player::putCard(){
+       Card mycard  = this->stack.front(); // return the next card
+       stack.erase(stack.begin()); //delete this card from the vector
+       return mycard;
+    }
+
+    void Player::won(Card c1, Card c2){
+        this->pcardsTaken.push_back(c1);
+        this->pcardsTaken.push_back(c2);
+    }
+    
     // void Player::shuffle() {
     //     std::random_shuffle(stack.begin(), stack.end());
     // }
