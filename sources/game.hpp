@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
+#include "stdio.h"
+#include <vector>
 #include "player.hpp"
+using namespace std;
 
 namespace ariel{
     class Game
@@ -9,6 +12,7 @@ namespace ariel{
         Player player1;
         Player player2;
         int turn;
+        vector<string> packet;
     public:
         std::string to_string();
 
