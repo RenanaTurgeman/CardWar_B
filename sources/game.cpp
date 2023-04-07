@@ -63,8 +63,7 @@ namespace ariel{
         while (!isGameOver())
         {
             playTurn();
-        }
-        
+        }  
     }
 
     void Game::playTurn(){
@@ -86,7 +85,8 @@ namespace ariel{
         {
             //player2 take the cards to his cardstaken packet
             this->player2.won(c1,c2);
-        }else //if there is a draw
+
+        }else //if there is a draw - WAR
         {
             Card wins[26];
             int numWins =0;
@@ -95,14 +95,36 @@ namespace ariel{
                 wins[numWins++] = c1;
                 wins[numWins++] = c2;
 
-                //put the closed cards
+                //put the closed cards for each player
                 wins[numWins++] = this->player1.putCard();
                 wins[numWins++] = this->player2.putCard();
 
-                //need to do from the opend cards
+                //put opend cards for each player
+                c1 = this->player1.putCard();
+                c2 = this->player2.putCard();
 
             }
-            
+            //end the war. now check the possibole cases
+            //case 1: the game over while the war, this is stiil draw- Dividing cards.
+            if((c1.getNum()==c2.getNum())&&(this->player1.stacksize()==0)){
+                for (int i = 1; i <= numWins/2 ; i+2)
+                {
+                    this->player1.won(wins[i]);
+                    this->player2.won(wins[i+1]);
+                }
+            }else(c1.getNum()>c2.getNum()){ //player1 won in the war
+                //player 1 won all the cardes of the war
+                for (int i = 0; i < numWins; i++)
+                {
+                    this->player1.won(wins[i])
+                }
+            }else(c1.getNum()<c2.getNum()){ //player2 won in the war
+                //player 2 won all the cardes of the war
+                for (int i = 0; i < numWins; i++)
+                {
+                    this->player2.won(wins[i]);
+                }
+            }
         }
         
         

@@ -27,6 +27,7 @@ public:
     void addToStack(const std::vector<Card>& cards);
     Card putCard(); //put card while play
     void won(Card c1, Card c2);
+    void won(Card c1);
     std::string getName();
     void addCardToStack(Card mycard);
 };

@@ -40,6 +40,10 @@ Card Player::playCard() {
         this->pcardsTaken.push_back(c1);
         this->pcardsTaken.push_back(c2);
     }
+
+    void Player::won(Card c1){
+        this->pcardsTaken.push_back(c1);
+    }
     
     std::string Player::getName(){
        return name;
