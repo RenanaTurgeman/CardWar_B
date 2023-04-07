@@ -3,6 +3,8 @@
 #include "stdio.h"
 #include <vector>
 #include "player.hpp"
+#include "card.hpp"
+
 using namespace std;
 
 namespace ariel{
@@ -12,7 +14,11 @@ namespace ariel{
         Player player1;
         Player player2;
         int turn;
-        vector<string> packet;
+        vector<Card> packet;
+        bool gameOver;
+        void initializePacket(); //initialize packet with 52 cards
+        void shufflePacket(); //shufle the cards in the packet
+        void dealCards(); //deals for each player 26 cards
     public:
         std::string to_string();
 

@@ -4,15 +4,16 @@ using namespace std;
 
 namespace ariel{
     class Card{
-        private:
-            int number;
-            enum Shape { HEARTS, SPADES, CLUBS, DIAMONDS };
-            Shape shape;
+        
         public:
+            enum Shape { HEARTS, SPADES, CLUBS, DIAMONDS };
             // Constructors:
             Card(){};
             Card(int number , Shape shape);
             int getNum() const;
             std::string getShape();
+        private:
+            int number;
+            Shape shape;
     };
 }

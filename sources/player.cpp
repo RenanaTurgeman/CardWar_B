@@ -45,8 +45,8 @@ Card Player::playCard() {
        return name;
     }
 
-    // void Player::shuffle() {
-    //     std::random_shuffle(stack.begin(), stack.end());
-    // }
+    void Player::addCardToStack(Card mycard){
+        this->stack.push_back(mycard);
+    }
 
 }//namescap

@@ -25,10 +25,10 @@ public:
     void takeCard(const Card& card);
     Card playCard();
     void addToStack(const std::vector<Card>& cards);
-    Card putCard();
+    Card putCard(); //put card while play
     void won(Card c1, Card c2);
     std::string getName();
-    // void shuffle();
+    void addCardToStack(Card mycard);
 };
 
 }//namescap

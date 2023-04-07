@@ -1,11 +1,56 @@
 #include "game.hpp"
-#include "player.hpp"
+#include "card.hpp"
+
 using namespace std;
 // using namespace ariel{};
 namespace ariel{
+
+    void Game::initializePacket()
+    {
+        //create 52 cards and insert them into the packet
+        for (int i = 2; i <= 14; i++) //begin with 2 beacuse 14 is ace
+        {
+            packet.emplace_back(Card(i, ariel::Card::Shape::HEARTS));
+            packet.emplace_back(Card(i, ariel::Card::Shape::DIAMONDS));
+            packet.emplace_back(Card(i, ariel::Card::Shape::CLUBS));
+            packet.emplace_back(Card(i, ariel::Card::Shape::SPADES));
+        }
+    }
+
+    void Game::shufflePacket() {
+        int n = packet.size();
+        for (int i = n - 1; i > 0; i--) { //go over the packet from the to the beigenning
+            // j is a random number between 0-i
+            int j = rand() % (i + 1);
+
+            // swap the cards at index i and index j
+            Card temp = packet[i];
+            packet[i] = packet[j];
+            packet[j] = temp;
+        }
+    }
+
+    void Game::dealCards()
+    {
+        //each player get 26 cards
+        for (int i = 0; i < 26; i++)
+        {
+            this->player1.addCardToStack(packet.back());
+            packet.pop_back();
+            this->player2.addCardToStack(packet.back());
+            packet.pop_back();
+        }
+    }
+
     Game::Game(Player p1, Player p2){
         this->player1 = p1;
         this->player2 = p2;
+
+        gameOver = false;
+
+        initializePacket();
+        shufflePacket();
+        dealCards();
     }
     
     bool Game::isGameOver() const
@@ -64,7 +109,7 @@ namespace ariel{
     }
 
     void Game::printLastTurn(){ // print the last turn stats
-        
+
     }
 
     void Game::printLog(){
