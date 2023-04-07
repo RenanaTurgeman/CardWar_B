@@ -6,11 +6,13 @@ namespace ariel{
     class Card{
         private:
             int number;
-            //  shape;
+            enum Shape { HEARTS, SPADES, CLUBS, DIAMONDS };
+            Shape shape;
         public:
             // Constructors:
             Card(){};
-            Card(int number);
+            Card(int number , Shape shape);
             int getNum() const;
+            std::string getShape();
     };
 }

@@ -41,6 +41,10 @@ Card Player::playCard() {
         this->pcardsTaken.push_back(c2);
     }
     
+    std::string Player::getName(){
+       return name;
+    }
+
     // void Player::shuffle() {
     //     std::random_shuffle(stack.begin(), stack.end());
     // }

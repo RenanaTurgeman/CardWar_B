@@ -27,6 +27,7 @@ public:
     void addToStack(const std::vector<Card>& cards);
     Card putCard();
     void won(Card c1, Card c2);
+    std::string getName();
     // void shuffle();
 };
 

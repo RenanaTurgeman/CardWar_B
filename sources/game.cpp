@@ -41,7 +41,7 @@ namespace ariel{
         {
             //player2 take the cards to his cardstaken packet
             this->player2.won(c1,c2);
-        }else //if there is a tie
+        }else //if there is a draw
         {
             Card wins[26];
             int numWins =0;
@@ -63,8 +63,8 @@ namespace ariel{
         
     }
 
-    void Game::printLastTurn(){
-
+    void Game::printLastTurn(){ // print the last turn stats
+        
     }
 
     void Game::printLog(){
@@ -72,11 +72,19 @@ namespace ariel{
     }
 
     void Game::printStats(){
+    // for each player prints basic statistics: win rate, cards won, <other stats you want to print>.
+    // Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws. )
 
     }
 
-    void Game::printWiner(){
-
+    void Game::printWiner(){ // prints the name of the winning player
+        if (player1.cardesTaken() > player2.cardesTaken()) {
+            cout << this->player1.getName() << " wins with" << this->player1.cardesTaken() <<"cards!" << endl;
+        } else if (player1.cardesTaken() < player2.cardesTaken()) {
+            cout << this->player2.getName() << " wins with" << this->player2.cardesTaken() << "cards!" << endl;
+        } else {
+            cout << "The game ended in a draw. Both players obtained" << this->player1.cardesTaken() << "cards!" << endl;
+        }
     }
 
     // Game::to_string
