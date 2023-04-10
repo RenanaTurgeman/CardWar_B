@@ -13,7 +13,10 @@ namespace ariel{
     private:
         Player& player1; //by reference
         Player& player2;
-        int turn;
+        int turn; //for count the turns in the game
+        int draw; //for count the draws in the game
+        int wp1; //fot count the wins for player1
+        int wp2;
         vector<Card> packet;
         bool gameOver;
         void initializePacket(); //initialize packet with 52 cards

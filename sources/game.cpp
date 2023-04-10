@@ -50,6 +50,9 @@ namespace ariel{
         this->history = "";
         this->lastTurn = "";
         this->turn=0;
+        this->draw =0;
+        this->wp1 =0;
+        this->wp2 =0;
 
         initializePacket();
         shufflePacket();
@@ -90,6 +93,8 @@ namespace ariel{
             this->lastTurn = this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
                                 this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+
                                 this->player1.getName() + "wins";
+            this->wp1++;
+
         }else if (c1.getNum()>c2.getNum()) //player2 won
         {
             //player2 take the cards to his cardstaken packet
@@ -98,6 +103,7 @@ namespace ariel{
             this->lastTurn = this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
                                 this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+
                                 this->player2.getName() + "wins\n";
+            this->wp2++;
         }else //if there is a draw - WAR
         {
             
@@ -105,6 +111,7 @@ namespace ariel{
             int numWins =0;
             while ((!isGameOver())&& (c1.getNum()== c2.getNum()))
             {
+                this->draw++ ;
                 //insert to history
                 this->lastTurn += this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
                                 this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+ 
@@ -135,11 +142,12 @@ namespace ariel{
                 //player 1 won all the cardes of the war
                 for (int i = 0; i < numWins; i++)
                 {
-                    this->player1.won(wins[i])
+                    this->player1.won(wins[i]);
                 }
                 this->lastTurn += this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
                                 this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+
                                 this->player1.getName() + "wins\n";
+                this->wp1+=;
             }
             else(c1.getNum()<c2.getNum()){ //player2 won in the war
                 //player 2 won all the cardes of the war
@@ -150,6 +158,7 @@ namespace ariel{
                 this->lastTurn += this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
                                 this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+
                                 this->player2.getName() + "wins\n";
+                this->wp2++;
             }
 
             this-> history += this->lastTurn; 
@@ -169,7 +178,20 @@ namespace ariel{
     void Game::printStats(){
     // for each player prints basic statistics: win rate, cards won, <other stats you want to print>.
     // Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws. )
+        cout << "Game statistics:" << endl;
+        cout << "Number of turns:" << this->turn << endl;
+        cout << "Number of draws:" << this->draw <<endl;
+        cout << "Draw rate:" << (((double)this->draw/this->turn) *100) << endl;  
+        cout << "Cardes left:" << this->player1.stacksize() << endl;   
 
+        //statistics for each player:
+        cout << player1.getName() << "statistics:" << endl;
+        cout << "Cards won:" << this->player1.cardesTaken() << endl;
+        cout << "Win rate:" << (((double)this->wp1 / this->turn) *100 ) << endl;
+
+        cout << player2.getName() << "statistics:" << endl;
+        cout << "Cards won:" << this->player2.cardesTaken() << endl;
+        cout << "Win rate:" << (((double)this->wp2 / this->turn) *100 ) << endl;
     }
 
     void Game::printWiner(){ // prints the name of the winning player
