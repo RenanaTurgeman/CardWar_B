@@ -5,13 +5,23 @@ using namespace std;
 
 
 namespace ariel{
-    Card::Card(Name number , Shape shape){
+    Card::Card(int number , string value , Shape shape){
         this->number = number;
+        this->value = value;
         this->shape = shape;
     }
 
+    Card::Card(){
+        this->number = 1;
+        this->value = "ACE";
+        this->shape = HEARTS;
+    }
     int Card::getNum() const{
         return this->number;
+    }
+
+    string Card::getValue() const{
+        return this->value;
     }
     
     string Card::getShape() const{
@@ -23,23 +33,25 @@ namespace ariel{
             return "Spades";
         case CLUBS:
             return "Clubs";
+        case DIAMONDS:
+            return "Diamonds";
         }
     }
 
-    string Card::cardName() const{
-        switch (this->number)
-        {
-        case ACE:
-            return "Ace";
-        case JACK:
-            return "Jack"
-        case QUEEN:
-            return "Queen"
-        case KING:
-            return "King"
-        default:
-            return to_string((int)(this->number))
-            break;
-        }
-    }
+    // string Card::cardName() const{
+    //     switch (this->number)
+    //     {
+    //     case ACE:
+    //         return "Ace";
+    //     case JACK:
+    //         return "Jack";
+    //     case QUEEN:
+    //         return "Queen";
+    //     case KING:
+    //         return "King";
+    //     default:
+    //         return to_string((int)(this->number));
+    //         break;
+    //     }
+    // }
 }

@@ -1,23 +1,25 @@
 #pragma once
-using namespace std;
 #include <iostream>
 
 
 enum Shape { HEARTS, SPADES, CLUBS, DIAMONDS };
-enum Name{ ACE=1, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING };
+// enum Name{  2, 3, 4, 5, 6, 7, 8, 9, 10, JACK, QUEEN, KING ,ACE};
+
+using namespace std;
 
 namespace ariel{
     class Card{
         private:
-            Name number;
+            int number;
+            string value;
             Shape shape;
         public:
             // Constructors:
-            Card(){};
-            Card(Name number , Shape shape);
+            Card();
+            Card(int number , string value , Shape shape);
             int getNum() const;
             string getShape() const;
             string cardName() const;
-        
+            string getValue() const;
     };
 }

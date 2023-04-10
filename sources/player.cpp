@@ -36,13 +36,13 @@ Card Player::playCard() {
        return mycard;
     }
 
-    void Player::won(Card c1, Card c2){
-        this->pcardsTaken.push_back(c1);
-        this->pcardsTaken.push_back(c2);
+    void Player::won(Card card1, Card card2){
+        this->pcardsTaken.push_back(card1);
+        this->pcardsTaken.push_back(card2);
     }
 
-    void Player::won(Card c1){
-        this->pcardsTaken.push_back(c1);
+    void Player::won(Card card1){
+        this->pcardsTaken.push_back(card1);
     }
     
     std::string Player::getName(){

@@ -11,8 +11,8 @@ namespace ariel{
     class Game
     {
     private:
-        Player& player1; //by reference
-        Player& player2;
+        Player *player1; //by reference
+        Player *player2;
         int turn; //for count the turns in the game
         int draw; //for count the draws in the game
         int wp1; //fot count the wins for player1
@@ -28,14 +28,15 @@ namespace ariel{
         std::string to_string();
 
         // Constructors:
-        Game(){}
-        Game(Player p1,Player p2);
+        // Game(){}
+        Game(Player& player1,Player& player2);
         void playTurn();
         void printLastTurn(); // print the last turn stats
         void playAll(); //playes the game untill the end
         void printWiner(); // prints the name of the winning player
         void printLog(); // prints all the turns played one line per turn
         void printStats();// for each player prints basic statistics: win rate, cards won, <other stats you want to print>. Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws. )
-        bool Game::isGameOver() const;
+        bool isGameOver();
+        
     };
 }
