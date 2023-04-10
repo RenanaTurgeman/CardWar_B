@@ -17,23 +17,12 @@ namespace ariel{
         }
     }
 
-    // void Game::shufflePacket() {
-    //     int n = packet.size();
-    //     for (int  i = n - 1; i > 0; i--) { //go over the packet from the to the beigenning
-    //         // j is a random number between 0-i
-    //         unsigned int j = rand() % (i + 1);
-
-    //         // swap the cards at index i and index j
-    //         Card temp = packet[i];
-    //         packet[i] = packet[j];
-    //         packet[j] = temp;
-    //     }
-    // }
+    
     void Game::shufflePacket() {
     auto n = packet.size();
     for (unsigned int i = n - 1; i > 0; --i) {
         // j is a random number between 0-i
-        unsigned int j = static_cast<unsigned int>(rand()) % (i + 1);
+        unsigned int j = static_cast<unsigned int>(rand()) % (i + 1); //cast the answer to unsigend int
 
         // swap the cards at index i and index j
         Card temp = packet[i];
@@ -109,10 +98,7 @@ namespace ariel{
          if(this->player1->getPlaying()==false || this->player2->getPlaying() == false){
             throw logic_error("player can get into a game once");
         }
-        // if(&player1 == &player2){
-        //     throw invalid_argument("there is a one player in the game");
-        // }
-
+       
         this->lastTurn = "";
         Card c1 = this->player1->putCard();
         Card c2 = this->player2->putCard();

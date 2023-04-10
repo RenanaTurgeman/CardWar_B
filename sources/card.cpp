@@ -37,21 +37,5 @@ namespace ariel{
             return "Diamonds";
         }
     }
-
-    // string Card::cardName() const{
-    //     switch (this->number)
-    //     {
-    //     case ACE:
-    //         return "Ace";
-    //     case JACK:
-    //         return "Jack";
-    //     case QUEEN:
-    //         return "Queen";
-    //     case KING:
-    //         return "King";
-    //     default:
-    //         return to_string((int)(this->number));
-    //         break;
-    //     }
-    // }
+    //tostring
 }
