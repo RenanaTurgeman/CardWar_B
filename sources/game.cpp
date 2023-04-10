@@ -58,7 +58,7 @@ namespace ariel{
         this->player1 = &player1;
         this->player2 = &player2;
 
-        if(this->player1->getPlaying() || this->player2->getPlaying()){
+        if(this->player1->getPlaying()==true || this->player2->getPlaying() == true){
             throw logic_error("player can get into a game once");
         }
 
@@ -84,28 +84,34 @@ namespace ariel{
 
     //playes the game untill the end
     void Game::playAll(){
-        if(&player1 == &player2){
-            throw invalid_argument("there is a one player in the game");
-        }
+        
         while (!isGameOver())
         {
             playTurn();
         }  
+
+         this->player1->setPlaying(false);
+            this->player2->setPlaying(false);
     }
 
     void Game::playTurn(){
         if(++this->turn > 26){
             throw logic_error("cant play more than 26 rounds");
         }
-        if ((this->player1->stacksize() == 0 || this->player2->stacksize() == 0 ))
+        if(player1 == player2){
+            throw logic_error("same player");
+        }
+         if ((this->player1->stacksize() == 0 || this->player2->stacksize() == 0 ))
         {
             throw logic_error("the Game is over");
             return;
         }
-        
-        if(&player1 == &player2){
-            throw invalid_argument("there is a one player in the game");
+         if(this->player1->getPlaying()==false || this->player2->getPlaying() == false){
+            throw logic_error("player can get into a game once");
         }
+        // if(&player1 == &player2){
+        //     throw invalid_argument("there is a one player in the game");
+        // }
 
         this->lastTurn = "";
         Card c1 = this->player1->putCard();
@@ -197,6 +203,10 @@ namespace ariel{
             }
 
             this-> history += this->lastTurn; 
+            if(this->player1->stacksize()==0){
+                this->player1->setPlaying(false);
+                this->player2->setPlaying(false);
+            }
         }
         
         
