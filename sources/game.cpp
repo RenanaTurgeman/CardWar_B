@@ -46,9 +46,10 @@ namespace ariel{
         this->player1 = &p1;
         this->player2 = &p2;
 
-        gameOver = false;
-        history = "";
-        lastTurn = "";
+        this->gameOver = false;
+        this->history = "";
+        this->lastTurn = "";
+        this->turn=0;
 
         initializePacket();
         shufflePacket();
@@ -57,7 +58,7 @@ namespace ariel{
     
     bool Game::isGameOver() const
     {
-        return (this->player1.stacksize() == 0 || this->player2.stacksize() == 0 || turn >= 26);
+        return (this->player1.stacksize() == 0 || this->player2.stacksize() == 0 || this->turn >= 26);
     }
 
     //playes the game untill the end
@@ -69,12 +70,14 @@ namespace ariel{
     }
 
     void Game::playTurn(){
-        //can play only if there is cards in thr packet
+        this->turn++;
+        //can play only if there is cards in thr packet and cant be more than 26 turns
         if (isGameOver())
         {
             throw runtime_error("the Game is over");
         }
 
+        this->lastTurn = "";
         Card c1 = this->player1.putCard();
         Card c2 = this->player2.putCard();
 
@@ -84,21 +87,28 @@ namespace ariel{
             //player1 take the cards to his cardstaken packet
             this->player1.won(c1,c2);
             //insert to history
-            //  Alice played Queen of Hearts Bob played 5 of Spades. Alice wins.
-             history.push_back(this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
+            this->lastTurn = this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
                                 this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+
-                                this->player1.getName() + "wins");
+                                this->player1.getName() + "wins";
         }else if (c1.getNum()>c2.getNum()) //player2 won
         {
             //player2 take the cards to his cardstaken packet
             this->player2.won(c1,c2);
-
+            //insert to history
+            this->lastTurn = this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
+                                this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+
+                                this->player2.getName() + "wins\n";
         }else //if there is a draw - WAR
         {
+            
             Card wins[26];
             int numWins =0;
             while ((!isGameOver())&& (c1.getNum()== c2.getNum()))
             {
+                //insert to history
+                this->lastTurn += this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
+                                this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+ 
+                                "DRAW!\n"
                 wins[numWins++] = c1;
                 wins[numWins++] = c2;
 
@@ -119,6 +129,7 @@ namespace ariel{
                     this->player1.won(wins[i]);
                     this->player2.won(wins[i+1]);
                 }
+                this->lastTurn += "the game over in a middle of a WAR in draw. \n"
             }
             else(c1.getNum()>c2.getNum()){ //player1 won in the war
                 //player 1 won all the cardes of the war
@@ -126,6 +137,9 @@ namespace ariel{
                 {
                     this->player1.won(wins[i])
                 }
+                this->lastTurn += this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
+                                this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+
+                                this->player1.getName() + "wins\n";
             }
             else(c1.getNum()<c2.getNum()){ //player2 won in the war
                 //player 2 won all the cardes of the war
@@ -133,18 +147,23 @@ namespace ariel{
                 {
                     this->player2.won(wins[i]);
                 }
+                this->lastTurn += this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
+                                this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+
+                                this->player2.getName() + "wins\n";
             }
+
+            this-> history += this->lastTurn; 
         }
         
         
     }
 
     void Game::printLastTurn(){ // print the last turn stats
-
+        cout << this->lastTurn << endl;
     }
 
     void Game::printLog(){
-
+        cout << this->history << endl;
     }
 
     void Game::printStats(){
