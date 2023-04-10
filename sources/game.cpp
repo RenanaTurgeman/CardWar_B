@@ -43,10 +43,12 @@ namespace ariel{
     }
 
     Game::Game(Player p1, Player p2){
-        this->player1 = p1;
-        this->player2 = p2;
+        this->player1 = &p1;
+        this->player2 = &p2;
 
         gameOver = false;
+        history = "";
+        lastTurn = "";
 
         initializePacket();
         shufflePacket();
@@ -81,6 +83,11 @@ namespace ariel{
         {
             //player1 take the cards to his cardstaken packet
             this->player1.won(c1,c2);
+            //insert to history
+            //  Alice played Queen of Hearts Bob played 5 of Spades. Alice wins.
+             history.push_back(this->player1.getName()+" played"+ c1.cardName()+ " of "+ c1.getShape()+" "+ 
+                                this->player2.getName+" played"+ c2.cardName()+ " of "+ c2.getShape()+"."+
+                                this->player1.getName() + "wins");
         }else if (c1.getNum()>c2.getNum()) //player2 won
         {
             //player2 take the cards to his cardstaken packet
@@ -112,13 +119,15 @@ namespace ariel{
                     this->player1.won(wins[i]);
                     this->player2.won(wins[i+1]);
                 }
-            }else(c1.getNum()>c2.getNum()){ //player1 won in the war
+            }
+            else(c1.getNum()>c2.getNum()){ //player1 won in the war
                 //player 1 won all the cardes of the war
                 for (int i = 0; i < numWins; i++)
                 {
                     this->player1.won(wins[i])
                 }
-            }else(c1.getNum()<c2.getNum()){ //player2 won in the war
+            }
+            else(c1.getNum()<c2.getNum()){ //player2 won in the war
                 //player 2 won all the cardes of the war
                 for (int i = 0; i < numWins; i++)
                 {

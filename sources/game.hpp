@@ -11,14 +11,16 @@ namespace ariel{
     class Game
     {
     private:
-        Player player1;
-        Player player2;
+        Player& player1; //by reference
+        Player& player2;
         int turn;
         vector<Card> packet;
         bool gameOver;
         void initializePacket(); //initialize packet with 52 cards
         void shufflePacket(); //shufle the cards in the packet
         void dealCards(); //deals for each player 26 cards
+        string history; //the history of the game for printing
+        string lastTurn; //save the history of the last turn for printing
     public:
         std::string to_string();
 

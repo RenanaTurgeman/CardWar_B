@@ -1,10 +1,11 @@
 #include "card.hpp"
 #include <iostream>
 #include "stdio.h"
+using namespace std;
 
 
 namespace ariel{
-    Card::Card(int number , Shape shape){
+    Card::Card(Name number , Shape shape){
         this->number = number;
         this->shape = shape;
     }
@@ -13,7 +14,7 @@ namespace ariel{
         return this->number;
     }
     
-    std::string Card::getShape(){
+    string Card::getShape() const{
         switch (this->shape)
         {
         case HEARTS:
@@ -25,4 +26,20 @@ namespace ariel{
         }
     }
 
+    string Card::cardName() const{
+        switch (this->number)
+        {
+        case ACE:
+            return "Ace";
+        case JACK:
+            return "Jack"
+        case QUEEN:
+            return "Queen"
+        case KING:
+            return "King"
+        default:
+            return to_string((int)(this->number))
+            break;
+        }
+    }
 }
