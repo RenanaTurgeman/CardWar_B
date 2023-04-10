@@ -4,6 +4,11 @@ using namespace std;
 namespace ariel{
 Player::Player(std::string name){
     this->name = name;
+    this->playing = false;
+}
+Player::Player(){
+    this->playing = false;
+
 }
 
 int Player::stacksize() const{ //prints the amount of cards left.
@@ -51,6 +56,14 @@ Card Player::playCard() {
 
     void Player::addCardToStack(Card mycard){
         this->stack.push_back(mycard);
+    }
+
+    bool Player::getPlaying(){
+        return this->playing;
+    }
+
+    void Player::setPlaying(bool chose){
+        this->playing = chose;
     }
 
 }//namescap

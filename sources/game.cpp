@@ -58,6 +58,12 @@ namespace ariel{
         this->player1 = &player1;
         this->player2 = &player2;
 
+        if(this->player1->getPlaying() || this->player2->getPlaying()){
+            throw logic_error("player can get into a game once");
+        }
+
+        this->player1->setPlaying(true);
+        this->player2->setPlaying(true);
         this->gameOver = false;
         this->history = "";
         this->lastTurn = "";
@@ -78,6 +84,9 @@ namespace ariel{
 
     //playes the game untill the end
     void Game::playAll(){
+        if(&player1 == &player2){
+            throw invalid_argument("there is a one player in the game");
+        }
         while (!isGameOver())
         {
             playTurn();
@@ -85,11 +94,17 @@ namespace ariel{
     }
 
     void Game::playTurn(){
-        this->turn++;
-        //can play only if there is cards in thr packet and cant be more than 26 turns
-        if (isGameOver())
+        if(++this->turn > 26){
+            throw logic_error("cant play more than 26 rounds");
+        }
+        if ((this->player1->stacksize() == 0 || this->player2->stacksize() == 0 ))
         {
-            throw runtime_error("the Game is over");
+            throw logic_error("the Game is over");
+            return;
+        }
+        
+        if(&player1 == &player2){
+            throw invalid_argument("there is a one player in the game");
         }
 
         this->lastTurn = "";
@@ -102,9 +117,9 @@ namespace ariel{
             //player1 take the cards to his cardstaken packet
             this->player1->won(c1,c2);
             //insert to history
-            this->lastTurn = this->player1->getName()+" played"+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
-                                this->player2->getName()+" played"+ c2.getValue()+ " of "+ c2.getShape()+"."+
-                                this->player1->getName() + "wins";
+            this->lastTurn = this->player1->getName()+" played "+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
+                                this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
+                                this->player1->getName() + " wins";
             this->wp1++;
 
         }else if (c1.getNum()>c2.getNum()) //player2 won
@@ -112,9 +127,9 @@ namespace ariel{
             //player2 take the cards to his cardstaken packet
             this->player2->won(c1,c2);
             //insert to history
-            this->lastTurn = this->player1->getName()+" played"+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
-                                this->player2->getName()+" played"+ c2.getValue()+ " of "+ c2.getShape()+"."+
-                                this->player2->getName() + "wins\n";
+            this->lastTurn = this->player1->getName()+" played "+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
+                                this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
+                                this->player2->getName() + " wins\n";
             this->wp2++;
         }else //if there is a draw - WAR
         {
@@ -123,11 +138,12 @@ namespace ariel{
             int numWins =0;
             while ((!isGameOver())&& (c1.getNum()== c2.getNum()))
             {
+                this->turn++;
                 this->draw++ ;
                 //insert to history
-                this->lastTurn += this->player1->getName()+" played"+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
-                                this->player2->getName()+" played"+ c2.getValue()+ " of "+ c2.getShape()+"."+ 
-                                "DRAW!\n";
+                this->lastTurn += this->player1->getName()+" played "+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
+                                this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+ 
+                                " DRAW!\n";
                 wins[numWins++] = c1;
                 wins[numWins++] = c2;
 
@@ -148,6 +164,10 @@ namespace ariel{
                     this->player1->won(wins[i]);
                     this->player2->won(wins[i+1]);
                 }
+                //these cards not in the wins arr
+                this->player1->won(c1);
+                this->player2->won(c2);
+
                 this->lastTurn += "the game over in a middle of a WAR in draw. \n";
             }
             else if(c1.getNum()>c2.getNum()){ //player1 won in the war
@@ -156,6 +176,8 @@ namespace ariel{
                 {
                     this->player1->won(wins[i]);
                 }
+                this->player1->won(c1,c2);
+
                 this->lastTurn += this->player1->getName()+" played"+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
                                 this->player2->getName()+" played"+ c2.getValue()+ " of "+ c2.getShape()+"."+
                                 this->player1->getName() + "wins\n";
@@ -167,6 +189,7 @@ namespace ariel{
                 {
                     this->player2->won(wins[i]);
                 }
+                this->player2->won(c1,c2);
                 this->lastTurn += this->player1->getName()+" played"+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
                                 this->player2->getName()+" played"+ c2.getValue()+ " of "+ c2.getShape()+"."+
                                 this->player2->getName() + "wins\n";
@@ -197,11 +220,11 @@ namespace ariel{
         cout << "Cardes left:" << this->player1->stacksize() << endl;   
 
         //statistics for each player:
-        cout << player1->getName() << "statistics:" << endl;
+        cout << player1->getName() << " statistics:" << endl;
         cout << "Cards won:" << this->player1->cardesTaken() << endl;
         cout << "Win rate:" << (((double)this->wp1 / this->turn) *100 ) << endl;
 
-        cout << player2->getName() << "statistics:" << endl;
+        cout << player2->getName() << " statistics:" << endl;
         cout << "Cards won:" << this->player2->cardesTaken() << endl;
         cout << "Win rate:" << (((double)this->wp2 / this->turn) *100 ) << endl;
     }

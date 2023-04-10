@@ -14,10 +14,9 @@ private:
     std::string name;
     std::vector<Card> stack;
     std::vector<Card> pcardsTaken;
-
+    bool playing; //for decleare the player are playing once
 public:
-    Player(){
-    }
+    Player();
     Player(std::string name);
     // std::string to_string();
     int stacksize() const; //prints the amount of cards left.
@@ -30,6 +29,8 @@ public:
     void won(Card card1);
     std::string getName();
     void addCardToStack(Card mycard);
+    bool getPlaying();
+    void setPlaying(bool chose);
 };
 
 }//namescap
