@@ -2,7 +2,6 @@
 #include "card.hpp"
 
 using namespace std;
-// using namespace ariel{};
 namespace ariel{
 
     void Game::initializePacket()
@@ -86,7 +85,8 @@ namespace ariel{
 
     void Game::playTurn(){
         //check the problematic cases:
-        if(++this->turn > 26){
+        if(++this->turn > 26){    
+        //A turn ends when one of the players takes the cards to him, so we count once when entering the function
             throw logic_error("cant play more than 26 rounds");
         }
         if(player1 == player2){
@@ -102,7 +102,6 @@ namespace ariel{
         }
        
         this->lastTurn = "";
-        // this->turn++; //A turn ends when one of the players takes the cards to him, so we count once when entering the function
         Card c1 = this->player1->putCard();
         Card c2 = this->player2->putCard();
 
@@ -133,7 +132,6 @@ namespace ariel{
             int numWins =0;
             while ((!isGameOver())&& (c1.getNum()== c2.getNum()))
             {
-                this->turn++;
                 this->draw++ ;
                 //insert to history
                 this->lastTurn += this->player1->getName()+" played "+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
