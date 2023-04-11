@@ -83,29 +83,30 @@ namespace ariel{
         this->player2->setPlaying(false);
     }
 
-    void Game::playTurn(){
+   void Game::playTurn(){
         //check the problematic cases:
         if(++this->turn > 26){    
         //A turn ends when one of the players takes the cards to him, so we count once when entering the function
             throw logic_error("cant play more than 26 rounds");
         }
         if(player1 == player2){
-            throw logic_error("same player");
+            throw logic_error("The same player cannot play against themselves.");
         }
          if ((this->player1->stacksize() == 0 || this->player2->stacksize() == 0 ))
         {
             throw logic_error("the Game is over");
             return;
         }
-         if(this->player1->getPlaying()==false || this->player2->getPlaying() == false){
-            throw logic_error("player can get into a game once"); //not in game
+         if(!this->player1->getPlaying() || !this->player2->getPlaying()){
+            throw logic_error("Each player can only play once."); 
         }
        
+       // Initialize last turn string and get cards played by players
         this->lastTurn = "";
         Card c1 = this->player1->putCard();
         Card c2 = this->player2->putCard();
 
-        //check who will won in this turn
+        //check who his the winner in this turn
         if (c1.getNum()>c2.getNum()) //player1 won
         {
             //player1 take the cards to his cardstaken packet
@@ -113,7 +114,7 @@ namespace ariel{
             //insert to history
             this->lastTurn = this->player1->getName()+" played "+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
                                 this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
-                                this->player1->getName() + " wins";
+                                this->player1->getName() + " wins.\n";
             this->wp1++;
 
         }else if (c1.getNum()>c2.getNum()) //player2 won
@@ -125,18 +126,18 @@ namespace ariel{
                                 this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
                                 this->player2->getName() + " wins\n";
             this->wp2++;
-        }else //if there is a draw - WAR
+        }else //a draw - WAR
         {
-            
-            Card wins[26];
+            Card wins[26]; //for store the cards which used in the war
             int numWins =0;
-            while ((!isGameOver())&& (c1.getNum()== c2.getNum()))
+            while ((!isGameOver())&& (c1.getNum()== c2.getNum())) // play a WAR
             {
                 this->draw++ ;
                 //insert to history
                 this->lastTurn += this->player1->getName()+" played "+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
                                 this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+ 
                                 " DRAW!\n";
+                // Add played cards to wins array
                 wins[numWins++] = c1;
                 wins[numWins++] = c2;
 
@@ -149,7 +150,7 @@ namespace ariel{
                 c2 = this->player2->putCard();
 
             }
-            //end the war. now check the possibole cases
+            //end the  WAR -check the possibole cases
             //case 1: the game over while the war, this is stiil draw- Dividing cards.
             if((c1.getNum()==c2.getNum())&&(this->player1->stacksize()==0)){
                 for (int i = 1; i <= numWins/2 ; i+=2)
@@ -157,11 +158,11 @@ namespace ariel{
                     this->player1->won(wins[i]);
                     this->player2->won(wins[i+1]);
                 }
-                //these cards not in the wins arr
+                // Add these cards to the players' card stacks- these cards not in the wins arr
                 this->player1->won(c1);
                 this->player2->won(c2);
 
-                this->lastTurn += "the game over in a middle of a WAR in draw. \n";
+                this->lastTurn += " the game over in a middle of a WAR in draw. \n";
             }
             else if(c1.getNum()>c2.getNum()){ //player1 won in the war
                 //player 1 won all the cardes of the war
