@@ -8,28 +8,28 @@ namespace ariel{
     void Game::initializePacket()
     {
         //create 52 cards and insert them into the packet
-        for (int i = 2; i <= 14; i++) //begin with 2 beacuse 14 is ace
+        for (int i = 1; i <= 13; i++) 
         {
-            packet.emplace_back(Card(i, std::to_string(i) , Shape::HEARTS));
-            packet.emplace_back(Card(i, std::to_string(i) , Shape::DIAMONDS));
-            packet.emplace_back(Card(i, std::to_string(i) , Shape::CLUBS));
-            packet.emplace_back(Card(i, std::to_string(i) , Shape::SPADES));
+            packet.emplace_back(Card(i, Shape::HEARTS));
+            packet.emplace_back(Card(i, Shape::DIAMONDS));
+            packet.emplace_back(Card(i, Shape::CLUBS));
+            packet.emplace_back(Card(i, Shape::SPADES));
         }
     }
 
     
     void Game::shufflePacket() {
-    auto n = packet.size();
-    for (unsigned int i = n - 1; i > 0; --i) {
-        // j is a random number between 0-i
-        unsigned int j = static_cast<unsigned int>(rand()) % (i + 1); //cast the answer to unsigend int
-
-        // swap the cards at index i and index j
-        Card temp = packet[i];
-        packet[i] = packet[j];
-        packet[j] = temp;
+        auto n = packet.size();
+        for (unsigned int i = n - 1; i > 0; --i) {
+         // j is a random number between 0-i
+            unsigned int j = static_cast<unsigned int>(rand()) % (i + 1); //cast the answer to unsigend int
+            // https://cplusplus.com/forum/beginner/148544/ - here i see this option for cast
+            // swap the cards at index i and index j
+            Card temp = packet[i];
+            packet[i] = packet[j];
+            packet[j] = temp;
+        }
     }
-}
 
     void Game::dealCards()
     {
@@ -51,6 +51,7 @@ namespace ariel{
             throw logic_error("player can get into a game once");
         }
 
+        //initialize variables
         this->player1->setPlaying(true);
         this->player2->setPlaying(true);
         this->gameOver = false;
@@ -79,11 +80,12 @@ namespace ariel{
             playTurn();
         }  
 
-         this->player1->setPlaying(false);
-            this->player2->setPlaying(false);
+        this->player1->setPlaying(false);
+        this->player2->setPlaying(false);
     }
 
     void Game::playTurn(){
+        //check the problematic cases:
         if(++this->turn > 26){
             throw logic_error("cant play more than 26 rounds");
         }
@@ -96,10 +98,11 @@ namespace ariel{
             return;
         }
          if(this->player1->getPlaying()==false || this->player2->getPlaying() == false){
-            throw logic_error("player can get into a game once");
+            throw logic_error("player can get into a game once"); //not in game
         }
        
         this->lastTurn = "";
+        // this->turn++; //A turn ends when one of the players takes the cards to him, so we count once when entering the function
         Card c1 = this->player1->putCard();
         Card c2 = this->player2->putCard();
 
@@ -170,9 +173,9 @@ namespace ariel{
                 }
                 this->player1->won(c1,c2);
 
-                this->lastTurn += this->player1->getName()+" played"+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
-                                this->player2->getName()+" played"+ c2.getValue()+ " of "+ c2.getShape()+"."+
-                                this->player1->getName() + "wins\n";
+                this->lastTurn += this->player1->getName()+" played "+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
+                                this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
+                                this->player1->getName() + " wins\n";
                 this->wp1++;
             }
             else if(c1.getNum()<c2.getNum()){ //player2 won in the war
@@ -182,9 +185,9 @@ namespace ariel{
                     this->player2->won(wins[i]);
                 }
                 this->player2->won(c1,c2);
-                this->lastTurn += this->player1->getName()+" played"+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
-                                this->player2->getName()+" played"+ c2.getValue()+ " of "+ c2.getShape()+"."+
-                                this->player2->getName() + "wins\n";
+                this->lastTurn += this->player1->getName()+" played "+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
+                                this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
+                                this->player2->getName() + " wins\n";
                 this->wp2++;
             }
 
@@ -210,28 +213,28 @@ namespace ariel{
     // for each player prints basic statistics: win rate, cards won, <other stats you want to print>.
     // Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws. )
         cout << "Game statistics:" << endl;
-        cout << "Number of turns:" << this->turn << endl;
-        cout << "Number of draws:" << this->draw <<endl;
-        cout << "Draw rate:" << (((double)this->draw/this->turn) *100) << endl;  
-        cout << "Cardes left:" << this->player1->stacksize() << endl;   
+        cout << "Number of turns: " << this->turn << endl;
+        cout << "Number of draws: " << this->draw <<endl;
+        cout << "Draw rate: " << (((double)this->draw/this->turn) *100) << endl;  
+        cout << "Cardes left: " << this->player1->stacksize() << endl;   
 
         //statistics for each player:
         cout << player1->getName() << " statistics:" << endl;
-        cout << "Cards won:" << this->player1->cardesTaken() << endl;
-        cout << "Win rate:" << (((double)this->wp1 / this->turn) *100 ) << endl;
+        cout << "Cards won: " << this->player1->cardesTaken() << endl;
+        cout << "Win rate: " << (((double)this->wp1 / this->turn) *100 ) << endl;
 
         cout << player2->getName() << " statistics:" << endl;
-        cout << "Cards won:" << this->player2->cardesTaken() << endl;
-        cout << "Win rate:" << (((double)this->wp2 / this->turn) *100 ) << endl;
+        cout << "Cards won: " << this->player2->cardesTaken() << endl;
+        cout << "Win rate: " << (((double)this->wp2 / this->turn) *100 ) << endl;
     }
 
     void Game::printWiner(){ // prints the name of the winning player
         if (player1->cardesTaken() > player2->cardesTaken()) {
-            cout << this->player1->getName() << " wins with" << this->player1->cardesTaken() <<"cards!" << endl;
+            cout << this->player1->getName() << " wins with " << this->player1->cardesTaken() <<" cards!" << endl;
         } else if (player1->cardesTaken() < player2->cardesTaken()) {
-            cout << this->player2->getName() << " wins with" << this->player2->cardesTaken() << "cards!" << endl;
+            cout << this->player2->getName() << " wins with" << this->player2->cardesTaken() << " cards!" << endl;
         } else {
-            cout << "The game ended in a draw. Both players obtained" << this->player1->cardesTaken() << "cards!" << endl;
+            cout << "The game ended in a draw. Both players obtained " << this->player1->cardesTaken() << " cards!" << endl;
         }
     }
 

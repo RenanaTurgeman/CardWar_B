@@ -15,11 +15,12 @@ namespace ariel{
         public:
             // Constructors:
             Card();
-            Card(int number , string value , Shape shape);
+            Card(int number , Shape shape);
+
             int getNum() const;
             string getShape() const;
-            string cardName() const;
+            string cardName(int num) const;
             string getValue() const;
-            string toString() const;
+            // int getRank() const; 
     };
 }
