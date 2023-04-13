@@ -141,7 +141,7 @@ namespace ariel{
             cout << this->lastTurn << endl;
         }else //a draw - WAR
         {
-            Card wins[26]; //for store the cards which used in the war
+            Card wins[52]; //for store the cards which used in the war - the max
             int numWins =0;
             while ((!isGameOver())&& (c1.getNum()== c2.getNum())) // play a WAR
             {
