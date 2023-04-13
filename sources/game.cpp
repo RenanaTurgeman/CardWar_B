@@ -1,5 +1,9 @@
 #include "game.hpp"
 #include "card.hpp"
+#include <random>
+#include <algorithm>
+#include <iostream>
+
 
 using namespace std;
 namespace ariel{
@@ -17,18 +21,25 @@ namespace ariel{
     }
 
     
+    // void Game::shufflePacket() {
+    //     auto n = packet.size();
+    //     for (unsigned int i = n - 1; i > 0; --i) {
+    //      // j is a random number between 0-i
+    //         unsigned int j = static_cast<unsigned int>(rand()) % (i + 1); //cast the answer to unsigend int
+    //         // https://cplusplus.com/forum/beginner/148544/ - here i see this option for cast
+    //         // swap the cards at index i and index j
+    //         Card temp = this->packet[i];
+    //         this->packet[i] = this->packet[j];
+    //         this->packet[j] = temp;
+    //     }
+    // }
+
+    //I found that the function I wrote didn't shuffle verey well, so I used this link-https://cppsecrets.com/users/931049711497106109971151165748485664103109971051084699111109/C00-Program-to-Shuffle-Deck-of-Cards.php
+    //And according to the warnings I also came to this link-https://cplusplus.com/reference/random/default_random_engine/
     void Game::shufflePacket() {
-        auto n = packet.size();
-        for (unsigned int i = n - 1; i > 0; --i) {
-         // j is a random number between 0-i
-            unsigned int j = static_cast<unsigned int>(rand()) % (i + 1); //cast the answer to unsigend int
-            // https://cplusplus.com/forum/beginner/148544/ - here i see this option for cast
-            // swap the cards at index i and index j
-            Card temp = packet[i];
-            packet[i] = packet[j];
-            packet[j] = temp;
-        }
-    }
+        std::default_random_engine engine{std::random_device{}()};
+        std::shuffle(packet.begin(), packet.end(), engine);
+    }      
 
     void Game::dealCards()
     {
@@ -116,6 +127,7 @@ namespace ariel{
                                 this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
                                 this->player1->getName() + " wins.\n";
             this->wp1++;
+            cout << this->lastTurn << endl;
 
         }else if (c1.getNum()>c2.getNum()) //player2 won
         {
@@ -126,6 +138,7 @@ namespace ariel{
                                 this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
                                 this->player2->getName() + " wins\n";
             this->wp2++;
+            cout << this->lastTurn << endl;
         }else //a draw - WAR
         {
             Card wins[26]; //for store the cards which used in the war
@@ -137,6 +150,7 @@ namespace ariel{
                 this->lastTurn += this->player1->getName()+" played "+ c1.getValue()+ " of "+ c1.getShape()+" "+ 
                                 this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+ 
                                 " DRAW!\n";
+                cout << this->lastTurn << endl;
                 // Add played cards to wins array
                 wins[numWins++] = c1;
                 wins[numWins++] = c2;
@@ -163,6 +177,7 @@ namespace ariel{
                 this->player2->won(c2);
 
                 this->lastTurn += " the game over in a middle of a WAR in draw. \n";
+                cout << this->lastTurn << endl;
             }
             else if(c1.getNum()>c2.getNum()){ //player1 won in the war
                 //player 1 won all the cardes of the war
@@ -176,6 +191,7 @@ namespace ariel{
                                 this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
                                 this->player1->getName() + " wins\n";
                 this->wp1++;
+                cout << this->lastTurn << endl;
             }
             else if(c1.getNum()<c2.getNum()){ //player2 won in the war
                 //player 2 won all the cardes of the war
@@ -188,6 +204,8 @@ namespace ariel{
                                 this->player2->getName()+" played "+ c2.getValue()+ " of "+ c2.getShape()+". "+
                                 this->player2->getName() + " wins\n";
                 this->wp2++;
+                cout << this->lastTurn << endl;
+
             }
 
             this-> history += this->lastTurn; 
