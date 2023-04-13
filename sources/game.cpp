@@ -143,7 +143,7 @@ namespace ariel{
         {
             Card wins[52]; //for store the cards which used in the war - the max
             int numWins =0;
-            while ((!isGameOver())&& (c1.getNum()== c2.getNum())) // play a WAR
+            while ((!isGameOver())&& (c1.getNum()== c2.getNum())&& (player1->stacksize()>=2)) // play a WAR
             {
                 this->draw++ ;
                 //insert to history
@@ -165,8 +165,19 @@ namespace ariel{
 
             }
             //end the  WAR -check the possibole cases
-            //case 1: the game over while the war, this is stiil draw- Dividing cards.
-            if((c1.getNum()==c2.getNum())&&(this->player1->stacksize()==0)){
+            //case 1: the game over while the war, the last card in the packet detrmine the winner
+            if((c1.getNum()==c2.getNum())&& (this->player1->stacksize()==1)){
+                //the 2 cards that has a draw between them
+                 wins[numWins++] = c1;
+                 wins[numWins++] = c2;
+                
+                //open two cards which detrmine the winner - the last cards that left
+                c1 = this->player1->putCard();
+                c2 = this->player2->putCard();
+                //just open the cards and the following if's cases detrmine what happen
+            }
+            //case 2: the game over while the war, this is stiil draw- Dividing cards.
+            if((c1.getNum()==c2.getNum())&&(this->player1->stacksize()<2)){
                 for (int i = 1; i <= numWins/2 ; i+=2)
                 {
                     this->player1->won(wins[i]);
